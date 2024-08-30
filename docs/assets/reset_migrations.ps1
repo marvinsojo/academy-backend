@@ -32,19 +32,19 @@ $dbManager = $envVariables["DB_MANAGER"]
 Remove-Item -Recurse -Force "$projectDirectory\migrations\versions" -ErrorAction SilentlyContinue
 pipenv run init
 try {
-    if ($dbManager -eq "postgresql") {
+    #if ($dbManager -eq "postgresql") {
         psql -U $dbUser -c "DROP DATABASE IF EXISTS $dbName";
         if ($LASTEXITCODE -ne 0) { throw "Failed to drop database" }
         psql -U $dbUser -c "CREATE DATABASE $dbName";
         if ($LASTEXITCODE -ne 0) { throw "Failed to create database" }
         psql -U $dbUser -c "CREATE EXTENSION unaccent" -d $dbName;
         if ($LASTEXITCODE -ne 0) { throw "Failed to create extension in database" }
-    } else {
-        mysql -h $dbUrl -u $dbUser -p -e "DROP DATABASE IF EXISTS $dbName"; if ($?) { Write-Output "DROP DATABASE" }
-        if ($LASTEXITCODE -ne 0) { throw "Failed to drop database" }
-        mysql -h $dbUrl -u $dbUser -p -e "CREATE DATABASE $dbName"; if ($?) { Write-Output "CREATE DATABASE" }
-        if ($LASTEXITCODE -ne 0) { throw "Failed to create database" }
-    }
+    # } else {
+    #     mysql -h $dbUrl -u $dbUser -p -e "DROP DATABASE IF EXISTS $dbName"; if ($?) { Write-Output "DROP DATABASE" }
+    #     if ($LASTEXITCODE -ne 0) { throw "Failed to drop database" }
+    #     mysql -h $dbUrl -u $dbUser -p -e "CREATE DATABASE $dbName"; if ($?) { Write-Output "CREATE DATABASE" }
+    #     if ($LASTEXITCODE -ne 0) { throw "Failed to create database" }
+    # }
     pipenv run migrate
     if ($LASTEXITCODE -ne 0) { throw "Failed to run migrations" }
     
